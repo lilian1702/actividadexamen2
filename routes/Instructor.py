@@ -10,6 +10,11 @@ from email.message import EmailMessage
 def index():
     return render_template('dashboard.html')
 
+
+@app.route('/rutas')
+def index():
+    return render_template('dashboard.html')
+
 def generar_contrasena(longitud=10):
     caracteres = string.ascii_letters + string.digits + "!@#$%^&*"
     return ''.join(secrets.choice(caracteres) for _ in range(longitud))
