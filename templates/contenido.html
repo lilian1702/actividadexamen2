@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+
+{% block menu %}
+    {% include "encabezado.html" %}
+{% endblock %}
+
+{% block contenido %}
+
+<h3 class="text-center fw-bold">Funcionamiento Aplicación</h3>
+
+<p>
+    Aplicación desarrollada en Python con Flask y como motor de bases de Datos MongoDB.
+    Realiza los procesos de CRUD a una base de datos.
+</p>
+
+<p class="fw-bold">Funcionalidades:</p>
+<ul>
+    <li>Agregar Instructor</li>
+    <li>Actualizar Instructor</li>
+    <li>Eliminar Instructor</li>
+    <li>Listar Instructor</li>
+    <li>Listar Guias</li>
+    <li>Agregar Guias</li>
+    <li>Actualizar Guias</li>
+    <li>Eliminar Guias</li>    
+</ul>
+
+{% endblock %}
+
+{% block piePagina %}
+    {% include "piePagina.html" %}
+{% endblock %}

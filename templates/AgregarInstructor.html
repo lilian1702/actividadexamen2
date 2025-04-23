@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block contenido %}
+<div class="container w-50 mt-4">
+    <h3 class="text-center bg-dark text-white p-2 rounded">Registrar Instructor</h3>
+    {% if mensaje %}
+        <div class="alert alert-warning">{{ mensaje }}</div>
+    {% endif %}
+    <form method="POST" action="/instructor/registrar">
+        <div class="mb-3">
+            <label for="nombreCompleto" class="form-label fw-bold">Nombre completo:</label>
+            <input type="text" class="form-control" name="nombreCompleto" required>
+        </div>
+        <div class="mb-3">
+            <label for="correo" class="form-label fw-bold">Correo:</label>
+            <input type="email" class="form-control" name="correo" required>
+        </div>
+        <div class="mb-3">
+            <label for="regional" class="form-label fw-bold">Regional:</label>
+            <select class="form-control" name="regional" required>
+                <option value="">-- Selecciona --</option>
+                <option value="cauca">Cauca</option>
+                <option value="huila">Huila</option>
+                <option value="antioquia">Antioquia</option>
+                <option value="valle">Valle</option>
+                <option value="cundinamarca">Cundinamarca</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-dark">Registrar</button>
+        <a href="/" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

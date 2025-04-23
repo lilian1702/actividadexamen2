@@ -1,0 +1,43 @@
+{% block contenido %}
+<script src="../static/js/app.js"></script>
+<div class="w-25" style="margin: 0 auto">
+    <form id="guia" class="was-validated" enctype="multipart/form-data">
+        <div>
+            <h3 class="text-center fw-bold bg-dark text-white" style="font-size:2lvw">REGISTRAR GUIA</h3>
+        </div>
+
+        <div class="mb-3">
+            <label class="fw-bold" for="txtNombre_guia">nombre de la guia de aprendizaje:</label>
+            <input type="text" name="txtNombre_guia" id="txtNombre_guia"class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="fw-bold" for="txtDescripcion">Descripcion:</label>
+            <input type="text" name="txtDescripcion" id="txtDescripcion" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="fw-bold" for="txtPrograma_formacion">Programa de formacion:</label>
+            <input type="text" name="txtPrograma_formacion" id="txtPrograma_formacion" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="fw-bold" for="fileDocumento">Documento en PDF:</label>
+            <input type="file" name="fileDocumento" id="fileDocumento" class="form-control" accept="application/pdf" required>
+        </div>
+       
+        <div class="mb-3">
+            <label class="fw-bold" for="fechaGuia">Fecha:</label>
+            <input type="date" name="fechaGuia" id="fechaGuia" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="fw-bold" for="txtNombre_instructor">Instructor que realiza el proceso:</label>
+            <input type="text" name="txtNombre_instructor" id="txtNombre_instructor" class="form-control" required>
+        </div>  
+        <div>
+            <button type="button" class="btn btn-dark" onclick="agregarGuia()">Agregar</button>
+            <a href="/peliculas/"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+        </div>
+    </form>
+</div>
+{% endblock %}
