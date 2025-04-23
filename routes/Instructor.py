@@ -8,8 +8,8 @@ from email.message import EmailMessage
 
 @app.route('/')
 def index():
+    print("Accediendo a la ruta principal...")
     return render_template('dashboard.html')
-
 
 @app.route('/rutas')
 def index():
