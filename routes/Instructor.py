@@ -60,6 +60,8 @@ def agregar_instructor():
         return redirect(url_for("agregar_instructor"))
     return render_template("agregar_instructor.html")
 
+
+
 from flask import request, redirect, url_for, render_template, flash, session
 from models.Instructor import Instructor
 
@@ -81,6 +83,7 @@ def login():
             return redirect(url_for("login"))
 
     return render_template("login.html")
+
 
 @app.route('/logout')
 def logout():
