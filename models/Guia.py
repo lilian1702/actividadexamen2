@@ -2,15 +2,16 @@ from mongoengine import *
 from models.Instructor import  Instructor
 
 
+from mongoengine import Document, StringField, ReferenceField
+from models.Instructor import Instructor
 
-class Guia(Document):
-    nombreGuia = IntField(unique=True, required=True)
-    descripcion = StringField(max_length=80, required=True)
-    programa_formacion = StringField(max_length=50, required=True)            
-    documento_pdf = FileField(required=True)
-    fecha_creacion = DateTimeField(required=True)    
-    instructor = ReferenceField(Instructor, required= True) 
+class NombreGuia(Document):
+    nombreguia = StringField(max_length=80, required=True)
+    descripcions = StringField(max_length=80, required=True)
+    programaformacion = StringField(max_length=80, required=True)
+    documento = StringField(max_length=200, required=True) 
+    fecha = StringField(max_length=80, required=True)
+    intructordeproceso = ReferenceField(Instructor, required=True)
 
     def __repr__(self):
-        return self.nombreGuia
-    
+        return self.nombreguia

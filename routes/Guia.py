@@ -1,39 +1,78 @@
-from app import app
-from flask import request, render_template, redirect, url_for
-from models.Guia import Guia
+from flask import render_template, request,send_from_directory,session,redirect,url_for,flash
+from models.Guia import NombreGuia
 from models.Instructor import Instructor
-from datetime import datetime
+from app import app
+from werkzeug.utils import secure_filename
+import os
+import traceback
 
-@app.route("/agregarguia/", methods=["POST"])
-def registrar_guia():
-    estado = False
-    mensaje = None
-    try:
-        nombre = int(request.form.get("txtNombre_guia"))
-        descripcion = request.form.get("txtDescripcion")
-        programa = request.form.get("txtPrograma_formacion")
-        documento = request.files.get("fileDocumento")
-        fecha = request.form.get("fechaGuia")
-        instructor_id = request.form.get("txtNombre_instructor")
-        instructor = Instructor.objects.get(id=instructor_id)
-        nueva_guia = Guia(
-            nombreGuia=nombre,
-            descripcion=descripcion,
-            programa_formacion=programa,
-            documento_pdf=documento,
-            fecha_creacion=datetime.strptime(fecha, "%Y-%m-%d"),
-            instructor=instructor
-        )
-        nueva_guia.save()
-        estado = True
-        mensaje = "Guía registrada exitosamente"
-    except Exception as e:
-        mensaje = str(e)
-    return {"estado": estado, "mensaje": mensaje}
+UPLOAD_FOLDER = 'uploads/pdf'
+ALLOWED_EXTENSIONS = {'pdf'}
 
-@app.route("/guiaslistar", methods=["GET"])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/listarguia", methods=["GET"])
 def listar_guias():
-    guias = Guia.objects()
-    return render_template("ListarGuias.html", guias=guias)
+        guias = NombreGuia.objects()
+        return render_template("listarguia.html", guias=guias)
+
+@app.route("/agregarguia", methods=['GET', 'POST'])
+def agregar_guia():
+    if 'instructor_id' not in session:
+        flash('Debes iniciar sesión para realizar esta acción', 'warning')
+        return redirect(url_for('login'))
+    else:
+
+        mensaje = None
+        estado = False
+        instructores = Instructor.objects()
+        if request.method == 'POST':
+            try:
+                if 'documento' not in request.files:
+                    mensaje = "No se ha cargado ningún archivo PDF."
+                    return render_template("agregarguia.html", mensaje=mensaje, estado=estado, instructores=instructores)
+                documento = request.files['documento']
+                if documento.filename == '':
+                    mensaje = "No seleccionaste un archivo PDF."
+                    return render_template("agregarguia.html", mensaje=mensaje, estado=estado, instructores=instructores)
+                if documento and allowed_file(documento.filename):
+                    filename = secure_filename(documento.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    documento.save(filepath)
+                    nombreguia = request.form.get("nombreguia")
+                    descripcions = request.form.get("descripcions")
+                    programaformacion = request.form.get("programaformacion")
+                    fecha = request.form.get("fecha")
+                    instructor_id = request.form.get("intructordeproceso")
+                    instructor_ref = Instructor.objects(id=instructor_id).first()
+                    if instructor_ref:
+                        nueva_guia = NombreGuia(
+                            nombreguia=nombreguia,
+                            descripcions=descripcions,
+                            programaformacion=programaformacion,
+                            documento=filename,
+                            fecha=fecha,
+                            intructordeproceso=instructor_ref
+                        )
+                        nueva_guia.save()
+                        estado = True
+                        mensaje = "Guía registrada exitosamente."
+                    else:
+                        mensaje = "Instructor no encontrado."
+                else:
+                    mensaje = "El archivo no es un PDF válido."
+            except Exception as e:
+                import traceback
+                print("Error real al guardar la guía:")
+                traceback.print_exc()
+                mensaje = f"Error al guardar la guía: {str(e)}"
+        return render_template("agregarguia.html", mensaje=mensaje, estado=estado, instructores=instructores)
 
 
+@app.route('/uploads/pdf/<path:filename>')
+def download_file(filename):
+    return send_from_directory('uploads/pdf', filename)

@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+{% block contenido %}
+<div class="container w-50 mt-4">
+    <h3 class="text-center bg-dark text-white p-2 rounded">Registrar Instructor</h3>
+    {% if mensaje %}
+        <div class="alert alert-warning">{{ mensaje }}</div>
+    {% endif %}
+    <form id="form-instructor">
+        <label>Nombre completo:</label>
+        <input type="text" name="nombre_completo" required><br><br>
+        
+        <label>Correo:</label>
+        <input type="email" name="correo" required><br><br>
+        
+        <label>Regional:</label>
+        <select name="regional" required>
+            <option value="">-- Selecciona una opción --</option>
+            <option value="cauca">Cauca</option>
+            <option value="huila">Huila</option>
+            <option value="antioquia">Antioquia</option>
+            <option value="valle">Valle</option>
+            <option value="cundinamarca">Cundinamarca</option>
+        </select><br><br>
+        
+        <button type="submit">Guardar Instructor</button>
+    </form>
+</div>
+{% endblock %}

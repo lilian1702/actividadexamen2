@@ -1,58 +1,32 @@
 {% extends "index.html" %}
 
-{% block menu %}
-    {% include "encabezado.html" %}
-{% endblock %}
-
 {% block contenido %}
-    <script src="../static/js/app.js"></script>
-    <div class="w-25" style="margin: 0 auto">
-        <form id="guia" class="was-validated" enctype="multipart/form-data" method="POST" action="/guia/agregar">
-            <div>
-                <h3 class="text-center fw-bold bg-dark text-white" style="font-size:2lvw">
-                    AGREGAR GUIA
-                </h3>
-            </div>
-            <div class="mb-3">
-                <label class="fw-bold" for="txtNombre_guia">nombre de la guia de aprendizaje:</label>
-                <input type="number" name="txtNombre_guia" id="txtNombre_guia" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="fw-bold" for="txtDescripcion">Descripcion:</label>
-                <input type="text" name="txtDescripcion" id="txtDescripcion" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="fw-bold" for="txtPrograma_formacion">Programa de formacion:</label>
-                <input type="text" name="txtPrograma_formacion" id="txtPrograma_formacion" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="fw-bold" for="fileDocumento">Documento en PDF:</label>
-                <input type="file" name="fileDocumento" id="fileDocumento" class="form-control" accept="application/pdf" required>
-            </div>
-           
-            <div class="mb-3">
-                <label class="fw-bold" for="fechaGuia">Fecha:</label>
-                <input type="date" name="fechaGuia" id="fechaGuia" class="form-control" required>
-            </div>
+<div class="container">
+  <h2>Registrar Nueva Guía</h2>
+  <form method="POST" enctype="multipart/form-data" id="formGuia">
+    <label>Nombre de la Guía:</label>
+    <input type="text" name="nombreguia" id="nombreguia" required /><br /><br />
     
-            <div class="mb-3">
-                <label class="fw-bold" for="txtNombre_instructor">Instructor que realiza el proceso:</label>
-                <select name="txtNombre_instructor" id="txtNombre_instructor" class="form-control" required>
-                    {% for instructor in instructores %}
-                        <option value="{{ instructor.id }}">{{ instructor.nombreCompleto }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-             
-            <div>
-                <button type="button" class="btn btn-dark" onclick="agregarGuia()">Agregar</button>
-                <a href="/guia/"><button type="button" class="btn btn-secondary">Cancelar</button></a>
-            </div>
-        </form>
-    </div>
-            
-{% endblock %}
-
-{% block piePagina %}
-    {% include "piePagina.html" %}
+    <label>Descripción:</label>
+    <input type="text" name="descripcions" id="descripcions" required /><br /><br />
+    
+    <label>Programa de Formación:</label>
+    <input type="text" name="programaformacion" id="programaformacion" required /><br /><br />
+    
+    <label>Documento:</label>
+    <input type="file" name="documento" id="documento" accept="application/pdf" required /><br /><br />
+    
+    <label>Fecha:</label>
+    <input type="date" name="fecha" id="fecha" required /><br /><br />
+    
+    <label>Instructor a Cargo:</label>
+    <select name="intructordeproceso" id="intructordeproceso" required>
+      <option value="">--Selecciona--</option>
+      {% for instructor in instructores %}
+      <option value="{{ instructor.id }}">{{ instructor.nombrecompleto }}</option>
+      {% endfor %}
+    </select><br /><br />
+    <button type="submit">Guardar Guía</button>
+  </form>
+</div>
 {% endblock %}
