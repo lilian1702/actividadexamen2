@@ -2,13 +2,14 @@
 
 {% block contenido %}
 <div class="container w-50 mt-4">
-    <h3 class="text-center bg-dark text-white p-2 rounded">Registrar Instructor</h3>
+    <h3 class="text-center bg-dark text-white p-2 rounded">Ingresar Instructor</h3>
     {% if mensaje %}
         <div class="alert alert-warning">{{ mensaje }}</div>
     {% endif %}
     <form method="POST" action="/login">
         <label>Correo:</label>
         <input type="email" name="correo" required>
+        
         <label>Contraseña:</label>
         <input type="password" name="contrasena" required>
         <button type="submit">Ingresar</button>

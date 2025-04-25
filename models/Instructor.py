@@ -1,21 +1,19 @@
 from mongoengine import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from models.regional import Regional
 
 class Instructor(Document):
-    nombre_completo = StringField(max_length=50, unique=True, required=True)
-    correo = StringField(max_length=50, unique=True, required=True)
-    regional = StringField(
-        max_length=50, 
-        choices=["cauca", "huila", "antioquia", "valle", "cundinamarca"], 
-        required=True
-    )
-    contrasena_segura = StringField(required=True)
+    nombre_completo = StringField(max_length=50, required=True)
+    correo = StringField(max_length=50, required=True)
+    regional = ReferenceField(Regional , required=True) 
+    contrasena = StringField(max_length=10)
+    # contrasena_segura = StringField(required=True)
 
-    def establecer_contrasena(self, contrasena):
-        self.contrasena_segura = generate_password_hash(contrasena)
+    # def establecer_contrasena(self, contrasena):
+    #     self.contrasena_segura = generate_password_hash(contrasena)
 
-    def verificar_contrasena(self, contrasena):
-        return check_password_hash(self.contrasena_segura, contrasena)
+    # def verificar_contrasena(self, contrasena):
+    #     return check_password_hash(self.contrasena_segura, contrasena)
 
     @classmethod
     def find_by_correo(cls, correo):

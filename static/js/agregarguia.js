@@ -1,5 +1,4 @@
-document
-  .getElementById("formGuia")
+document.getElementById("formGuia")
   .addEventListener("submit", function (event) {
     event.preventDefault();
 

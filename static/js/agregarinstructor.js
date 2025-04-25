@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("form-instructor");
     form.addEventListener("submit", async (e) => {

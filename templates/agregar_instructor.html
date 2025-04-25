@@ -6,22 +6,21 @@
     {% if mensaje %}
         <div class="alert alert-warning">{{ mensaje }}</div>
     {% endif %}
-    <form id="form-instructor">
+    <form id="form-instructor" method="POST" action="/agregarInstructor" >
         <label>Nombre completo:</label>
-        <input type="text" name="nombre_completo" required><br><br>
-        
+        <input type="text" name="nombre_completo" required><br><br>        
         <label>Correo:</label>
         <input type="email" name="correo" required><br><br>
-        
+        <label>Contrasena:</label>
+        <input type="password" name="contrasena" required><br><br>        
         <label>Regional:</label>
         <select name="regional" required>
             <option value="">-- Selecciona una opción --</option>
-            <option value="cauca">Cauca</option>
-            <option value="huila">Huila</option>
-            <option value="antioquia">Antioquia</option>
-            <option value="valle">Valle</option>
-            <option value="cundinamarca">Cundinamarca</option>
+            {% for regional in regionales %}
+                <option value="{{ regional.id }}">{{ regional.nombre }}</option>
+            {% endfor %}
         </select><br><br>
+        
         
         <button type="submit">Guardar Instructor</button>
     </form>
