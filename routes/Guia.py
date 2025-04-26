@@ -1,11 +1,9 @@
-# routes/Guia.py
-from flask import Blueprint, render_template, request, send_from_directory, session, redirect, url_for, flash
+from app import app
+from flask import render_template, request, send_from_directory, session, redirect, url_for, flash
 from models.Guia import NombreGuia
 from models.Instructor import Instructor
 from werkzeug.utils import secure_filename
 import os
-
-guia_bp = Blueprint('guia', __name__)
 
 UPLOAD_FOLDER = 'uploads/pdf'
 ALLOWED_EXTENSIONS = {'pdf'}
@@ -13,12 +11,12 @@ ALLOWED_EXTENSIONS = {'pdf'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@guia_bp.route("/listarguia", methods=["GET"])
+@app.route("/listarguia", methods=["GET"])
 def listar_guias():
     guias = NombreGuia.objects()
     return render_template("listarguia.html", guias=guias)
 
-@guia_bp.route("/agregarguia", methods=['GET', 'POST'])
+@app.route("/agregarguia", methods=['GET', 'POST'])
 def agregar_guia():
     if 'instructor_id' not in session:
         flash('Debes iniciar sesión para realizar esta acción', 'warning')
@@ -69,6 +67,8 @@ def agregar_guia():
             mensaje = f"Error al guardar la guía: {str(e)}"
     return render_template("agregarguia.html", mensaje=mensaje, estado=estado, instructores=instructores)
 
-@guia_bp.route('/uploads/pdf/<path:filename>')
+@app.route('/uploads/pdf/<path:filename>')
 def download_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
+
+

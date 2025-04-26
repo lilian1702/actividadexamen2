@@ -1,32 +1,47 @@
 {% extends "index.html" %}
 
 {% block contenido %}
-<div class="container">
-  <h2>Registrar Nueva Guía</h2>
-  <form method="POST" enctype="multipart/form-data" id="formGuia">
-    <label>Nombre de la Guía:</label>
-    <input type="text" name="nombreguia" id="nombreguia" required /><br /><br />
+<script src="../static/js/agregarguia.js"></script>
+<div class="w-25" style="margin: 0 auto">
+  <form id="agregarguia"> 
+    <h3 class="text-center bg-dark text-white p-2 rounded">Registrar Guía</h3>
     
-    <label>Descripción:</label>
-    <input type="text" name="descripcions" id="descripcions" required /><br /><br />
+    <div class="mb-2">
+      <label for="nombreguia">Nombre de la Guía:</label>
+      <input type="text" name="nombreguia" id="nombreguia" class="form-control" required>
+    </div>
     
-    <label>Programa de Formación:</label>
-    <input type="text" name="programaformacion" id="programaformacion" required /><br /><br />
+    <div class="mb-2">
+      <label for="descripcions">Descripción:</label>
+      <input type="text" name="descripcions" id="descripcions" class="form-control" required>
+    </div>
     
-    <label>Documento:</label>
-    <input type="file" name="documento" id="documento" accept="application/pdf" required /><br /><br />
+    <div class="mb-2">
+      <label for="programaformacion">Programa de Formación:</label>
+      <input type="text" name="programaformacion" id="programaformacion" class="form-control" required>
+    </div>
     
-    <label>Fecha:</label>
-    <input type="date" name="fecha" id="fecha" required /><br /><br />
+    <div class="mb-2">
+      <label for="documento">Documento:</label>
+      <input type="text" name="documento" id="documento" class="form-control" required>
+    </div>
     
-    <label>Instructor a Cargo:</label>
-    <select name="intructordeproceso" id="intructordeproceso" required>
-      <option value="">--Selecciona--</option>
-      {% for instructor in instructores %}
-      <option value="{{ instructor.id }}">{{ instructor.nombrecompleto }}</option>
-      {% endfor %}
-    </select><br /><br />
-    <button type="submit">Guardar Guía</button>
+    <div class="mb-2">
+      <label for="fecha">Fecha:</label>
+      <input type="date" name="fecha" id="fecha" class="form-control" required>
+    </div>    
+    
+    <div class="mb-2">  
+      <label for="intructordeproceso">Instructor a Cargo:</label>
+      <select name="intructordeproceso" id="intructordeproceso" class="form-control" required>
+        <option value="">--Selecciona--</option>
+        {% for instructor in instructores %}
+        <option value="{{ instructor.id }}">{{ instructor.nombrecompleto }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100 mt-2">Guardar Guía</button>
   </form>
 </div>
 {% endblock %}

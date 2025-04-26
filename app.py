@@ -25,15 +25,11 @@ app.config["MONGODB_SETTINGS"] = [{
 # Conectar con MongoDB
 connect(db, host=uri)
 
-# Importar y registrar Blueprints
-from routes.Guia import guia_bp
-from routes.Instructor import instructor_bp
-
-
-app.register_blueprint(guia_bp)
-app.register_blueprint(instructor_bp)
+# Importar rutas después de definir `app`
+import routes.Guia
+import routes.Instructor
 
 # Ejecutar la aplicación
 if __name__ == "__main__":
-    
     app.run(port=3000, host="0.0.0.0", debug=True)
+

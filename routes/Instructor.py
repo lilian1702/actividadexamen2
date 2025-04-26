@@ -1,20 +1,17 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash, session
+from app import app
+from flask import request, render_template, redirect, url_for, flash, session
 from models.Instructor import Instructor
 from models.regional import Regional
 
 import secrets, string
 import yagmail
 
-
-# Crear Blueprint
-instructor_bp = Blueprint('instructor_bp', __name__)
-
-@instructor_bp.route('/')
+@app.route('/')
 def index():
     print("Accediendo a la ruta principal...")
     return render_template('dashboard.html')
 
-@instructor_bp.route('/rutas')
+@app.route('/rutas')
 def rutas():
     return render_template('dashboard.html')
 
@@ -25,19 +22,17 @@ def generar_contrasena(longitud=10):
 def enviar_contrasena_por_correo(destinatario, nombre, contrasena):
     remitente = "quiraconstanza@gmail.com"
     contrasena_email = "cqzdobsjaynbjuzi"  # Usa tu app password de Gmail
-      
 
     try:
-        yag= yagmail.SMTP(remitente, contrasena_email)
+        yag = yagmail.SMTP(remitente, contrasena_email)
         asunto = "Bienvenido al sistema de gestión de guías"
-        contenido = f"hola {nombre},\n\nTu contraseña es: {contrasena}"
+        contenido = f"Hola {nombre},\n\nTu contraseña es: {contrasena}"
         yag.send(to=destinatario, subject=asunto, contents=contenido)
         print("Correo enviado correctamente.")
-       
     except Exception as e:
         print(f"Error al enviar correo: {e}")
 
-@instructor_bp.route("/agregarInstructor", methods=["GET", "POST"])
+@app.route("/agregarInstructor", methods=["GET", "POST"])
 def agregar_instructor():
     if request.method == "POST":
         nombre = request.form.get("nombre_completo")
@@ -45,18 +40,18 @@ def agregar_instructor():
         idRregional = request.form.get("regional")
         contrasena = request.form.get("contrasena")
         regional = Regional.objects(id=idRregional).first()
-        
+
         print("ID Regional:", idRregional)
         print("Nombre:", nombre)
-        print("Correo:", correo)                      
+        print("Correo:", correo)
 
         if not nombre or not correo or not regional:
             flash("Todos los campos son obligatorios.", "error")
-            return redirect(url_for("instructor_bp.agregar_instructor"))
+            return redirect(url_for("agregar_instructor"))
 
         if nombre.strip() == "":
             flash("El nombre completo es obligatorio.", "error")
-            return redirect(url_for("instructor_bp.agregar_instructor"))
+            return redirect(url_for("agregar_instructor"))
 
         nuevo_instructor = Instructor(
             nombre_completo=nombre,
@@ -64,39 +59,33 @@ def agregar_instructor():
             regional=regional,
             contrasena=contrasena
         )
-    
+
         nuevo_instructor.save()
         enviar_contrasena_por_correo(correo, nombre, contrasena)
         flash("Instructor agregado correctamente. Se envió la contraseña al correo.", "success")
-        return redirect(url_for("instructor_bp.index"))
+        return redirect(url_for("index"))
 
     regionales = Regional.objects()
     return render_template("agregar_instructor.html", regionales=regionales)
 
-
-@instructor_bp.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         correo = request.form.get("correo")
         contrasena = request.form.get("contrasena")
         instructor = Instructor.find_by_correo(correo)
 
-        if instructor is None:
+        if instructor is None or instructor.contrasena != contrasena:
             flash("Correo o contraseña incorrectos", "error")
-            return redirect(url_for("instructor_bp.login"))
-        
-        if instructor and instructor.contrasena == contrasena:
-            print("Inicio de sesión exitoso")
-            session["instructor_id"] = str(instructor.id)
-            flash("Inicio de sesión exitoso", "success")
-            return redirect(url_for("instructor_bp.index"))
-        else:
-            flash("Correo o contraseña incorrectos", "error")
-            return redirect(url_for("instructor_bp.login"))
+            return redirect(url_for("login"))
+
+        session["instructor_id"] = str(instructor.id)
+        flash("Inicio de sesión exitoso", "success")
+        return redirect(url_for("index"))
     return render_template("login.html")
 
-@instructor_bp.route('/logout')
+@app.route('/logout')
 def logout():
     session.pop('instructor_id', None)
     flash('¡Has cerrado sesión!', 'info')
-    return redirect(url_for('instructor_bp.login'))
+    return redirect(url_for('login'))
